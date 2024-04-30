@@ -1,12 +1,14 @@
-import React from 'react';
-import { Avatar, Dropdown, Navbar } from 'flowbite-react';
+import React, { useState } from 'react';
+import { Avatar, Button, Dropdown, Navbar } from 'flowbite-react';
 import { SearchBar } from './SearchBar';
 import "./styles/NavbarComponent.css"
+import { Login } from '../pages/LoginPage/Login';
 
 export const NavbarComponent = () => {
+  const [openModal, setOpenModal] = useState(false)
   return (
     <Navbar fluid rounded>
-      <Navbar.Brand href="https://flowbite-react.com">
+      <Navbar.Brand href="/">
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">ConnectProfiles</span>
       </Navbar.Brand>
       <div className="flex md:order-2">
@@ -29,6 +31,9 @@ export const NavbarComponent = () => {
       </div>
       <Navbar.Collapse className="navbar-collapse-custom">
         <SearchBar />
+        <Button>Search</Button>
+        <Button onClick={() => setOpenModal(true)}>Sign In</Button>
+        <Login openModal={openModal} setOpenModal={setOpenModal} />
       </Navbar.Collapse>
     </Navbar>
   );
