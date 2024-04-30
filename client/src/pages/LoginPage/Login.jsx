@@ -1,9 +1,10 @@
 import { Button, Checkbox, Label, Modal, Spinner, TextInput } from "flowbite-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import toast from 'react-hot-toast';
 import apiRequest from "../../lib/apiRequest"; // Your API request setup
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 export function Login({ openModal, setOpenModal }) {
   const [username, setusername] = useState('');
@@ -15,6 +16,7 @@ export function Login({ openModal, setOpenModal }) {
     setusername('');
     setPassword('');
   }
+  const {updateUser} = useContext(AuthContext)
   const navigate = useNavigate();
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -25,9 +27,10 @@ export function Login({ openModal, setOpenModal }) {
             password,
         });
         console.log("Login successful:", res);
+        updateUser(res.data)
         toast.success("Logged in successfully!");
-        // Perform any additional actions on successful login (e.g. redirecting the user)
         navigate("/")
+        onCloseModal()
     } catch (err) {
         console.log("Login error:", err);
         toast.error("Failed to log in. Please check your username and password.");
