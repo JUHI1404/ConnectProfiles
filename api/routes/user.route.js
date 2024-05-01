@@ -10,8 +10,8 @@ import {verifyToken} from "../middleware/verifyToken.js";
 const router = express.Router();
 
 router.get("/", getUsers);
-router.get("/search/:id", verifyToken, getUser);
-router.get("/search", verifyToken, searchUsers)
-router.put("/:id", verifyToken, updateUser);
+router.get("/search/:id", getUser);
+router.get("/search", searchUsers)
+router.put("/:id", updateUser);
 
 export default router;
