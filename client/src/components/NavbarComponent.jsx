@@ -20,6 +20,7 @@ export const NavbarComponent = () => {
       console.log(err);
     }
   };
+
   return (
     <Navbar fluid rounded>
       <Navbar.Brand href="/">
@@ -55,7 +56,6 @@ export const NavbarComponent = () => {
         {currentUser && (
           <>
           <SearchBar />
-          <Button href="/search">Search</Button>
           </>
         )}
         <Login openModal={openModal} setOpenModal={setOpenModal} />

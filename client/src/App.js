@@ -5,7 +5,6 @@ import { MainPage } from "./pages/MainPage/MainPage";
 import { SignUp } from './pages/SignUp/SignUp';
 import { Login } from "./pages/LoginPage/Login";
 import { ListPage } from "./pages/list/ListPage";
-import  {profileUpdatePage} from "./pages/UpdatePage/profileUpdatepage"
 import { useState } from "react";
 
 

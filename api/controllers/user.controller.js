@@ -49,3 +49,55 @@ export const updateUser = async (req, res) => {
     }
   };
   
+
+  export const searchUsers = async (req, res) => {
+    const { query } = req.query; 
+
+    if (!query || query.length < 3) {
+        return res.status(400).json({ message: "Search query must be at least 3 characters long." });
+    }
+
+    try {
+        const matchingProfiles = await prisma.user.findMany({
+            where: {
+                OR: [
+                    {
+                        username: {
+                            contains: query,
+                            mode: 'insensitive' 
+                        }
+                    },
+                    {
+                        jobTitle: {
+                            contains: query,
+                            mode: 'insensitive' 
+                        }
+                    },
+                    {
+                        department: {
+                            contains: query,
+                            mode: 'insensitive' 
+                        }
+                    },
+                    {
+                        location: {
+                            contains: query,
+                            mode: 'insensitive' 
+                        }
+                    },
+                    {
+                        shortBio: {
+                            contains: query,
+                            mode: 'insensitive' 
+                        }
+                    }
+                ]
+            }
+        });
+
+        res.status(200).json(matchingProfiles);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "Failed to search users!" });
+    }
+};

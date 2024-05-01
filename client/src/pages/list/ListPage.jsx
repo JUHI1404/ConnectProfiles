@@ -1,28 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Card, Button, Spinner } from 'flowbite-react';
 import apiRequest from '../../lib/apiRequest';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { SearchContext } from '../../context/SearchContext';
 
 export const ListPage = () => {
     const [profiles, setProfiles] = useState([]);
     const [expandedProfileId, setExpandedProfileId] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-
+    const {searchQuery} = useContext(SearchContext)
     // Fetch profiles when the component mounts
     useEffect(() => {
         const fetchProfiles = async () => {
             try {
-                const response = await apiRequest.get('/user/');
+                console.log('searchQuery', searchQuery)
+                const url = searchQuery ? `/user/search?query=${searchQuery}` : '/user/';
+                const response = await apiRequest.get(url);
                 setProfiles(response.data);
             } catch (err) {
                 console.error('Error fetching profiles:', err);
+                toast.error('Error fetching profiles:' + err.message)
             } finally {
                 setIsLoading(false);
             }
         };
 
         fetchProfiles();
-    }, []);
+    }, [searchQuery]);
 
     // Handle profile card click
     const handleProfileClick = (id) => {
@@ -44,8 +49,9 @@ export const ListPage = () => {
                     <span>Loading...</span>
                 </div>
             ) : (
-                // Display the list of profiles
-                profiles.map((profile) => (
+                
+                <>
+                {profiles.map((profile) => (
                     <Card key={profile.id} className="mb-4 w-3/4">
                         <div>
                             <h3 className="text-lg font-bold">{profile.username}</h3>
@@ -67,7 +73,9 @@ export const ListPage = () => {
                             </Button>
                         </div>
                     </Card>
-                ))
+                ))}
+                {profiles.length === 0 && <a style={{color:'blue'}} href='/'>No profiles found, click here to go back home</a>}
+                </>
             )}
         </div>
     );
