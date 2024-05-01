@@ -10,7 +10,7 @@ export function Login({ openModal, setOpenModal }) {
   const [username, setusername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
+  
   function onCloseModal() {
     setOpenModal(false);
     setusername('');

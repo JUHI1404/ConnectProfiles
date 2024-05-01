@@ -10,7 +10,7 @@ root.render(
   <React.StrictMode>
     <AuthContextProvider>
     <Toaster />
-    <App />
+   <App />
     </AuthContextProvider>
   </React.StrictMode>
 );
