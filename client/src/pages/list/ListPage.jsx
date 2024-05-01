@@ -52,27 +52,40 @@ export const ListPage = () => {
                 
                 <>
                 {profiles.map((profile) => (
-                    <Card key={profile.id} className="mb-4 w-3/4">
-                        <div>
-                            <h3 className="text-lg font-bold">{profile.username}</h3>
-                            <p>{profile.jobTitle}</p>
-                            <p>{profile.location}</p>
-
-                            {expandedProfileId === profile.id && (
-                                <div className="mt-2">
-                                    <p><strong>Email:</strong> {profile.email}</p>
-                                    <p><strong>Phone Number:</strong> {profile.phoneNumber}</p>
-                                    <p><strong>Short Bio:</strong> {profile.shortBio}</p>
-                                </div>
-                            )}
-                            <Button
-                                onClick={() => handleProfileClick(profile.id)}
-                                className="mt-2"
-                            >
-                                {expandedProfileId === profile.id ? "Show Less" : "Show More"}
-                            </Button>
-                        </div>
-                    </Card>
+                     <Card key={profile.id} className="mb-4 w-3/4 relative">
+                     <div className="flex items-center justify-between">
+                         {/* Adjust the size of the avatar image based on expansion state */}
+                         <img
+                             src={profile.avatar || './noavatar.jpg'}
+                             alt={`${profile.username}'s avatar`}
+                             className={`${
+                                 expandedProfileId === profile.id
+                                     ? 'w-24 h-24' // Larger size when expanded
+                                     : 'w-12 h-12' // Smaller size when collapsed
+                             } rounded-full object-cover`}
+                         />
+                         <div className="flex-grow ml-4">
+                             <h3 className="text-lg font-bold">{profile.username}</h3>
+                             <p>{profile.jobTitle}</p>
+                             <p>{profile.location}</p>
+                         </div>
+                     </div>
+                     {/* Expandable content */}
+                     {expandedProfileId === profile.id && (
+                         <div className="mt-2">
+                             <p><strong>Email:</strong> {profile.email}</p>
+                             <p><strong>Phone Number:</strong> {profile.phoneNumber}</p>
+                             <p><strong>Short Bio:</strong> {profile.shortBio}</p>
+                         </div>
+                     )}
+                     {/* Show More/Show Less button */}
+                     <Button
+                         onClick={() => handleProfileClick(profile.id)}
+                         className="mt-2"
+                     >
+                         {expandedProfileId === profile.id ? "Show Less" : "Show More"}
+                     </Button>
+                 </Card>
                 ))}
                 {profiles.length === 0 && <a style={{color:'blue'}} href='/'>No profiles found, click here to go back home</a>}
                 </>

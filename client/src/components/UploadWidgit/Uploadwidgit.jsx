@@ -3,7 +3,7 @@ import { createContext, useEffect, useState } from "react";
 // Create a context to manage the script loading state
 const CloudinaryScriptContext = createContext();
 
-function UploadWidget({ uwConfig, setPublicId ,setAvatar  }) {
+function UploadWidget({ uwConfig, setPublicId, setState }) {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ function UploadWidget({ uwConfig, setPublicId ,setAvatar  }) {
         (error, result) => {
           if (!error && result && result.event === "success") {
             console.log("Done! Here is the image info: ", result.info);
-            setAvatar(result.info.secure_url);
+            setState((prev) => [...prev, result.info.secure_url]);
           }
         }
       );
@@ -53,6 +53,7 @@ function UploadWidget({ uwConfig, setPublicId ,setAvatar  }) {
         id="upload_widget"
         className="cloudinary-button"
         onClick={initializeCloudinaryWidget}
+        style={{backgroundColor: "#0E7490"}}
       >
         Upload
       </button>
@@ -60,4 +61,5 @@ function UploadWidget({ uwConfig, setPublicId ,setAvatar  }) {
   );
 }
 
-export { CloudinaryScriptContext, UploadWidget };
+export default UploadWidget;
+export { CloudinaryScriptContext };
