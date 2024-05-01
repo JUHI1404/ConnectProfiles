@@ -1,14 +1,25 @@
 import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Avatar, Button, Dropdown, Navbar } from 'flowbite-react';
-import { SearchBar } from './SearchBar';
-import './styles/NavbarComponent.css';
+import apiRequest from '../lib/apiRequest';
 import { Login } from '../pages/LoginPage/Login';
 import { AuthContext } from '../context/AuthContext';
+import { SearchBar } from './SearchBar';;
 
 export const NavbarComponent = () => {
   const [openModal, setOpenModal] = useState(false);
-  const { currentUser, signOut } = useContext(AuthContext);
+  const { currentUser, updateUser } = useContext(AuthContext);
 
+  const navigate = useNavigate()
+  const handleLogout = async () => {
+    try {
+      await apiRequest.post("/auth/logout");
+      updateUser(null);
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Navbar fluid rounded>
       <Navbar.Brand href="/">
@@ -34,22 +45,17 @@ export const NavbarComponent = () => {
             <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
             {/* Add more dropdown items as needed */}
             <Dropdown.Divider />
-            <Dropdown.Item onClick={signOut}>Sign out</Dropdown.Item>
+            <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
           </Dropdown>
         ) : (
           <Navbar.Toggle />
         )}
       </div>
       <Navbar.Collapse className="navbar-collapse-custom">
-        {currentUser ? (
+        {currentUser && (
           <>
           <SearchBar />
           <Button href="/search">Search</Button>
-          </>
-        ) : (
-          <>
-            <Button onClick={() => setOpenModal(true)}>Sign In</Button>
-            <Button href="/signup">Sign Up</Button>
           </>
         )}
         <Login openModal={openModal} setOpenModal={setOpenModal} />
