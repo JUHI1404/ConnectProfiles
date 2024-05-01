@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import apiRequest from "../../lib/apiRequest";
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import UploadWidget from '../../components/UploadWidgit/Uploadwidgit';
 
 export const SignUp = () => {
     // Set up state for form inputs
@@ -22,7 +23,7 @@ export const SignUp = () => {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const { currentUser, updateUser } = useContext(AuthContext);
-
+    const [avatar, setAvatar] = useState([]);
     // Populate form fields with currentUser data if present
     useEffect(() => {
         if (currentUser) {
@@ -34,7 +35,7 @@ export const SignUp = () => {
                 department: currentUser.department,
                 location: currentUser.location,
                 shortBio: currentUser.shortBio,
-                avatar: null, // Handle avatar differently if needed
+                avatar: avatar[0], 
             });
         }
     }, [currentUser]);
@@ -61,7 +62,7 @@ export const SignUp = () => {
             let res;
             if (currentUser) {
                 // User is logged in, update the profile
-                res = await apiRequest.put(`/user/${currentUser.id}`,{ ...formData
+                res = await apiRequest.put(`/user/${currentUser.id}`,{ ...formData, avatar: avatar[0]
                 });
                 toast.success("Profile Updated");
                 updateUser(res?.data)
@@ -96,8 +97,8 @@ export const SignUp = () => {
     return (
         <>
             <NavbarComponent />
-            <div className="flex justify-center">
-                <Card className="max-w-sm">
+            <div className="flex justify-center gap-8 p-4">
+                <Card className="max-w-sm w-3/4">
                     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                         {/* Form fields for editing profile or sign-up */}
                         <div>
@@ -187,15 +188,6 @@ export const SignUp = () => {
                                 onChange={handleInputChange}
                             />
                         </div>
-                        {/* Avatar file input */}
-                        <div>
-                            <Label htmlFor="avatar" value="Profile Picture" />
-                            <FileInput
-                                id="avatar"
-                                name="avatar"
-                                onChange={handleFileChange}
-                            />
-                        </div>
                         {/* "Remember me" checkbox */}
                         <div className="flex items-center gap-2">
                             <Checkbox id="remember" />
@@ -206,7 +198,7 @@ export const SignUp = () => {
                             {isLoading ? "Loading..." : currentUser ? "Update Profile" : "Sign Up"}
                         </Button>
                     </form>
-
+                    
                     {/* Loading indicator */}
                     {isLoading && (
                         <div className="flex items-center gap-2 mt-2">
@@ -215,6 +207,24 @@ export const SignUp = () => {
                         </div>
                     )}
                 </Card>
+                     <div className="flex flex-col items-center justify-center w-1/4">
+                    <Label htmlFor="avatar" value="Profile Picture" />
+                    <UploadWidget
+                        uwConfig={{
+                            cloudName: "dspicjwkq",
+                            uploadPreset: "connectprofiles",
+                            multiple: false,
+                            maxImageFileSize: 2000000,
+                            folder: "avatars",
+                        }}
+                        setState={setAvatar}
+                    />
+                    <img
+                        src={avatar[0] || currentUser?.avatar || './noavatar.jpg'}
+                        alt="Profile Avatar"
+                        className="avatar w-90 h-90 object-cover mt-2"
+                    />
+                </div>
             </div>
         </>
     );
