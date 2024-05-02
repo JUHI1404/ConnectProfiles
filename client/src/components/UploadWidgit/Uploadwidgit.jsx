@@ -7,7 +7,7 @@ function UploadWidget({ uwConfig, setPublicId, setState }) {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    // Check if the script is already loaded
+  
     if (!loaded) {
       const uwScript = document.getElementById("uw");
       if (!uwScript) {

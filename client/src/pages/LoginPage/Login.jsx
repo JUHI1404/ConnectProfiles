@@ -2,7 +2,7 @@ import { Button, Checkbox, Label, Modal, Spinner, TextInput } from "flowbite-rea
 import { useContext, useState } from "react";
 import axios from "axios";
 import toast from 'react-hot-toast';
-import apiRequest from "../../lib/apiRequest"; // Your API request setup
+import apiRequest from "../../lib/apiRequest";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
