@@ -8,7 +8,6 @@ import { AuthContext } from '../../context/AuthContext';
 import UploadWidget from '../../components/UploadWidgit/Uploadwidgit';
 
 export const SignUp = () => {
-    // Set up state for form inputs
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -24,7 +23,6 @@ export const SignUp = () => {
     const navigate = useNavigate();
     const { currentUser, updateUser } = useContext(AuthContext);
     const [avatar, setAvatar] = useState([]);
-    // Populate form fields with currentUser data if present
     useEffect(() => {
         if (currentUser) {
             setFormData({
@@ -40,19 +38,14 @@ export const SignUp = () => {
         }
     }, [currentUser]);
 
-    // Handle form input change
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
-
-    // Handle file input change
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         setFormData({ ...formData, avatar: file });
     };
-
-    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -61,13 +54,13 @@ export const SignUp = () => {
 
             let res;
             if (currentUser) {
-                // User is logged in, update the profile
+               
                 res = await apiRequest.put(`/user/${currentUser.id}`,{ ...formData, avatar: avatar[0]
                 });
                 toast.success("Profile Updated");
                 updateUser(res?.data)
             } else {
-                // User is not logged in, create a new profile
+                
                 res = await apiRequest.post("/auth/register",  {
                     ...formData
                 });
@@ -82,10 +75,8 @@ export const SignUp = () => {
                 console.log('Response data:', err.response.data);
                 console.log('Response status:', err.response.status);
             } else if (err.request) {
-                // No response received
                 console.log('No response received:', err.request);
             } else {
-                // Other errors such as network issues
                 console.log('Error:', err.message);
             }
             toast.error(err.message);
@@ -100,14 +91,12 @@ export const SignUp = () => {
             <div className="flex justify-center gap-8 p-4">
                 <Card className="max-w-sm w-3/4">
                     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-                        {/* Form fields for editing profile or sign-up */}
                         <div>
                             <Label htmlFor="email" value="Email" />
                             <TextInput
                                 id="email"
                                 name="email"
                                 type="email"
-                                placeholder="name@domain.com"
                                 required
                                 value={formData.email}
                                 onChange={handleInputChange}
@@ -119,7 +108,7 @@ export const SignUp = () => {
                                 id="password"
                                 name="password"
                                 type="password"
-                                required={!currentUser} // Make password required only if it's sign-up
+                                required={!currentUser}
                                 value={formData.password}
                                 onChange={handleInputChange}
                             /></div>}
@@ -133,10 +122,9 @@ export const SignUp = () => {
                                 required
                                 value={formData.username}
                                 onChange={handleInputChange}
-                                disabled={!!currentUser} // Disable username field if user is editing profile
+                                disabled={!!currentUser} 
                             />
                         </div>
-                        {/* Additional fields for phone number, job title, department, location, and short bio */}
                         <div>
                             <Label htmlFor="phoneNumber" value="Phone Number" />
                             <TextInput
@@ -188,18 +176,15 @@ export const SignUp = () => {
                                 onChange={handleInputChange}
                             />
                         </div>
-                        {/* "Remember me" checkbox */}
                         <div className="flex items-center gap-2">
                             <Checkbox id="remember" />
                             <Label htmlFor="remember">Remember me</Label>
                         </div>
-                        {/* Submit button */}
                         <Button type="submit" disabled={isLoading}>
                             {isLoading ? "Loading..." : currentUser ? "Update Profile" : "Sign Up"}
                         </Button>
                     </form>
                     
-                    {/* Loading indicator */}
                     {isLoading && (
                         <div className="flex items-center gap-2 mt-2">
                             <Spinner aria-label="Loading" />

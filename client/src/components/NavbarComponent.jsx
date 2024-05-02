@@ -34,7 +34,7 @@ export const NavbarComponent = () => {
             label={
               <Avatar
                 alt={currentUser.name}
-                img={currentUser.avatar || 'https://flowbite.com/docs/images/people/profile-picture-5.jpg'}
+                img={currentUser.avatar || 'https://res.cloudinary.com/dspicjwkq/image/upload/v1714633803/avatars/ipqcc2oqfooliph7fzbb.jpg'}
                 rounded
               />
             }
